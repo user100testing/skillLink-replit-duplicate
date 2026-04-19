@@ -8,11 +8,13 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
+          npm install @vitejs/plugin-react-swc --save-dev
       - name: Build web assets
         script: |
-          npm run build
+          npm run build || npx vite build
       - name: Initialize & Sync iOS
         script: |
+          npx cap init "SkillLink" "com.skilllink.app" --web-dir=dist
           npx cap add ios || true
           npx cap sync ios
       - name: Build Unsigned App
@@ -33,7 +35,5 @@ workflows:
           cp -r build/Build/Products/Release-iphoneos/App.app build/ipa/Payload/
           cd build/ipa
           zip -r SkillLink_Unsigned.ipa Payload
-artifacts:
-      - "**/build/ipa/*.ipa"
-      - "**/build/Build/Products/Release-iphoneos/*.app"
-      - "skillLink-replit-duplicate-main/build/ipa/*.ipa"
+    artifacts:
+      - build/ipa/*.ipa
