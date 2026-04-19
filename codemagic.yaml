@@ -14,10 +14,11 @@ workflows:
           npm run build
       - name: Capacitor Sync
         script: |
+          # This command creates the 'ios' folder if it doesn't exist
+          npx cap add ios || true
           npx cap sync ios
       - name: Build iOS Project
         script: |
-          # This creates the .app file without needing an Apple Developer Certificate
           xcodebuild build \
             -workspace ios/App/App.xcworkspace \
             -scheme App \
